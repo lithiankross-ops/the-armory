@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>The Armory</title><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'sha256-s9J0gvjVA7eyLEmPay8CqcTG8I94lWPoU69UOA98eyU='; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0b0806"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="The Armory"><link rel="icon" href="icons/icon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><style>*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#f0e2c4;font:16px/1.45 Georgia,'Times New Roman',serif}
+body{display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+ background:radial-gradient(ellipse at 50% 18%,#3a2716 0,#1a110a 38%,#050302 75%,#000 100%)}
+main{width:100%;max-width:380px;text-align:center;position:relative}
+.arch{margin:0 auto 18px;width:150px;height:190px;border:3px solid #ad8953;border-bottom:none;border-radius:75px 75px 0 0;background:linear-gradient(#24170e,#0b0806);
+ box-shadow:inset 0 0 30px #000,0 0 40px #e7a94a22;display:flex;align-items:center;justify-content:center}
+.arch span{font-size:72px;color:#e7c98b;text-shadow:0 0 18px #e7a94a55}
+h1{margin:0 0 6px;font-size:30px;font-weight:normal;letter-spacing:.06em;color:#f3d79c}
+.sub{margin:0 0 18px;color:#c9b48c;font-size:15px}
+form,.panel{background:#120c07e6;border:1px solid #6d5636;border-radius:10px;padding:16px;text-align:left;box-shadow:0 6px 30px #000}
+label.l{display:block;margin:0 0 6px;color:#f3d79c}
+.row{display:flex;gap:8px}
+input[type=password],input[type=text]{flex:1;min-width:0;min-height:48px;padding:10px 12px;font:17px Georgia,serif;color:#fff5df;background:#050302;border:1px solid #ad8953;border-radius:6px}
+input:focus-visible,button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+button{min-height:48px;min-width:48px;font:16px Georgia,serif;border-radius:6px;cursor:pointer;touch-action:manipulation}
+.show{padding:0 12px;color:#f0e2c4;background:#2b1e13;border:1px solid #ad8953}
+.rem{display:flex;align-items:center;gap:10px;min-height:48px;margin:10px 0 4px;color:#e9dbbd;cursor:pointer}
+.rem input{width:24px;height:24px;margin:0;accent-color:#e7c98b}
+.hint{margin:0 0 12px;font-size:13px;color:#c3ad86}
+.go{width:100%;color:#1a1008;background:#e7c98b;border:2px solid #fff1cf;font-size:18px}
+.go:disabled,.show:disabled{opacity:.6;cursor:progress}
+.msg{min-height:1.45em;margin:12px 0 0;color:#ffb4a8}
+.msg:empty{display:none}
+.status{margin:10px 0 0;color:#d9c39a;min-height:1.45em}
+.foot{margin:16px 0 0;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;color:#b9a27a;font-size:12px}
+.del{padding:6px 12px;font-size:13px;color:#d9c39a;background:#0b0806;border:1px solid #6d5636}
+.del.arm{color:#fff;background:#8f1d14;border-color:#ffb4a8}
+.panel h2{margin:0 0 8px;font-size:20px;font-weight:normal;color:#ffb4a8}.panel p{margin:0 0 10px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style></head>
+<body><!-- The Armory unlock screen. The app itself is only stored encrypted (app.bin, AES-256-GCM); nothing here can open it without the passphrase. -->
+<main>
+<div class="arch" aria-hidden="true"><span>A</span></div>
+<h1>The Armory</h1>
+<p class="sub" id="sub">Private test build. Enter the passphrase to open it.</p>
+<form id="unlock" autocomplete="on" novalidate>
+ <label class="l" for="pass">Passphrase</label>
+ <div class="row"><input id="pass" name="password" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" aria-describedby="msg status" required><button type="button" class="show" id="show" aria-pressed="false" aria-controls="pass">Show</button></div>
+ <label class="rem"><input type="checkbox" id="remember"> Remember on this device</label>
+ <p class="hint">Only tick this on your own phone. It keeps an unlock key on this device (never the passphrase itself).</p>
+ <button type="submit" class="go" id="go" disabled>Unlock</button>
+ <p class="msg" id="msg" role="alert"></p>
+ <p class="status" id="status" role="status" aria-live="polite">Preparing the offline copy…</p>
+</form>
+<section class="panel" id="locked" hidden tabindex="-1" aria-labelledby="lockedT"><h2 id="lockedT">All app data deleted</h2><p id="lockedD"></p></section>
+<div class="foot"><span id="ver"></span><button type="button" class="del" id="del">Delete all app data</button></div>
+</main>
+<script id="armory-loader">/* The Armory unlock screen (encrypted PWA build). No network calls: the service worker (same origin) holds the encrypted app.
+   Flow: register ./sw.js -> wait until the offline copy is ready -> passphrase -> PBKDF2-SHA256 -> non-extractable AES-GCM key ->
+   handed to the service worker, which checks it by decrypting app.bin (GCM tag) -> reload; the worker serves the decrypted app.
+   A wrong passphrase gets one generic message after a short fixed delay. */
+(()=>{'use strict';
+const CFG={"v":"112.2-dev","salt":"RtvzrYxooJO7rYcYwQeVMQ==","iter":600000,"failDelayMs":1200,"vdb":"armorydev-vault","dev":true};
+const D=document,W=window,N=navigator,$=id=>D.getElementById(id);
+const VDB=CFG.vdb, VST='keys';
+const els={form:$('unlock'),pass:$('pass'),show:$('show'),rem:$('remember'),go:$('go'),msg:$('msg'),status:$('status'),locked:$('locked'),lockedD:$('lockedD'),del:$('del'),ver:$('ver'),sub:$('sub')};
+let ready=false,busy=false,reg=null;
+const info={version:CFG.v,unlockMs:null,deriveMs:null};
+try{Object.defineProperty(W,'ArmoryLoader',{value:info})}catch(_){}
+els.ver.textContent='v'+CFG.v+(CFG.dev?' \u00b7 DEV test build':' \u00b7 test build');if(CFG.dev){els.sub.textContent='DEV test build (dev menu enabled). Enter the passphrase to open it.';D.title='The Armory DEV'}
+const norm=s=>s.normalize('NFC').trim().replace(/\s+/g,' ').toLowerCase();
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function idb(mode,fn){return new Promise((res,rej)=>{const q=indexedDB.open(VDB,1);q.onupgradeneeded=()=>q.result.createObjectStore(VST);q.onerror=()=>rej(q.error);
+ q.onsuccess=()=>{const db=q.result,tx=db.transaction(VST,mode);let out;const r=fn(tx.objectStore(VST));if(r)r.onsuccess=()=>{out=r.result};tx.oncomplete=()=>{db.close();res(out)};tx.onerror=tx.onabort=()=>{db.close();rej(tx.error)}}})}
+const delVault=()=>new Promise(r=>{try{const q=indexedDB.deleteDatabase(VDB);q.onsuccess=q.onerror=q.onblocked=()=>r()}catch(_){r()}});
+function ask(msg,ms=15000){const sw=N.serviceWorker&&((reg&&reg.active)||N.serviceWorker.controller);   // OUR worker first: under /dev/ the page can start out controlled by the root app's workerif(!sw)return Promise.resolve(null);
+ return new Promise(res=>{const ch=new MessageChannel(),t=setTimeout(()=>res(null),ms);ch.port1.onmessage=e=>{clearTimeout(t);res(e.data&&typeof e.data==='object'?e.data:null)};
+  try{sw.postMessage(msg,[ch.port2])}catch(_){clearTimeout(t);res(null)}})}
+function say(t){els.status.textContent=t}
+function setBusy(b){busy=b;els.go.disabled=b||!ready;els.pass.disabled=b;els.show.disabled=b}
+els.show.addEventListener('click',()=>{const on=els.pass.type==='password';els.pass.type=on?'text':'password';els.show.textContent=on?'Hide':'Show';els.show.setAttribute('aria-pressed',String(on));els.show.setAttribute('aria-label',on?'Hide passphrase':'Show passphrase')});
+els.show.setAttribute('aria-label','Show passphrase');
+async function wipeLocal(){
+ try{await ask({type:'armory-sw-forget'},3000)}catch(_){}
+ try{const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}catch(_){}
+ await delVault();
+ try{if(indexedDB.databases){const dbs=await indexedDB.databases();await Promise.all(dbs.map(d=>d&&d.name&&new Promise(r=>{const q=indexedDB.deleteDatabase(d.name);q.onsuccess=q.onerror=q.onblocked=()=>r()})))}}catch(_){}
+ try{sessionStorage.clear()}catch(_){}
+ try{const rs=await N.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}catch(_){}
+ try{localStorage.clear()}catch(_){}
+}
+els.form.addEventListener('submit',async e=>{e.preventDefault();if(busy||!ready)return;
+ const pw=norm(els.pass.value||'');if(!pw){els.msg.textContent='Enter the passphrase.';els.pass.focus();return}
+ setBusy(true);els.msg.textContent='';say('Unlocking…');const t0=performance.now();let key=null,ok=false;
+ try{const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  key=await crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:b64(CFG.salt),iterations:CFG.iter},base,{name:'AES-GCM',length:256},false,['decrypt']);
+  info.deriveMs=Math.round(performance.now()-t0);
+  const r=await ask({type:'armory-sw-unlock',key},30000);ok=!!(r&&r.type==='armory-sw-unlocked')}catch(_){ok=false}
+ els.pass.value='';
+ if(ok){info.unlockMs=Math.round(performance.now()-t0);
+  if(els.rem.checked){try{await idb('readwrite',st=>st.put(key,'k'))}catch(_){}}
+  say('Opening…');location.reload();return}
+ await sleep(CFG.failDelayMs);   // short fixed delay before the one generic answer
+ els.msg.textContent='That passphrase did not unlock the app.';say('');setBusy(false);els.pass.focus()});
+let delArm=0;
+els.del.addEventListener('click',async()=>{if(busy)return;if(!delArm){delArm=setTimeout(()=>{delArm=0;els.del.classList.remove('arm');els.del.textContent='Delete all app data'},6000);
+  els.del.classList.add('arm');els.del.textContent='Tap again to delete everything (saves too)';return}
+ clearTimeout(delArm);delArm=0;setBusy(true);await wipeLocal();els.form.hidden=true;els.sub.hidden=true;els.del.hidden=true;els.locked.hidden=false;
+ $('lockedT').textContent='All app data deleted';els.lockedD.textContent='Saves, the offline copy, any remembered key and the service worker are gone from this device. You can remove the icon now. For a complete wipe on Android, also clear this site in Chrome: Settings, Site settings, All sites, Delete data.';W.__armoryWiped=true;els.locked.focus()});
+async function start(){
+ if(!('serviceWorker' in N)||!W.isSecureContext||!W.crypto||!crypto.subtle){say('This app needs its https link in a current browser (Safari or Chrome).');return}
+ try{if(indexedDB.databases&&(await indexedDB.databases()).some(d=>d.name===VDB))await idb('readwrite',st=>st.delete('k'))}catch(_){}   // only reached if a remembered key no longer opens the app
+ try{reg=await N.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'})}catch(_){say('Could not prepare the offline copy. Check the connection and reload.');return}
+ for(let i=0;i<600&&!(reg.active&&reg.active.state==='activated');i++)await sleep(100);   // first install: wait for the worker
+ for(let i=0;i<120;i++){const r=await ask({type:'armory-sw-ready'},5000);if(r&&r.type==='armory-sw-ready'&&r.ready){ready=true;break}await sleep(500)}
+ if(!ready){say('Still downloading the offline copy… keep this open.');return}
+ say('Ready. Works offline from now on.');setBusy(false);
+ D.addEventListener('visibilitychange',()=>{if(!D.hidden&&reg)reg.update().catch(()=>{})});
+}
+start();
+})();
+</script>
+</body></html>

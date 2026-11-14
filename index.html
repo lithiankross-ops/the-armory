@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>The Armory</title><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'sha256-qm9yfTMvHAUhvAaXwyZK5tgG7ktsFOGenxBm1gMKHsM='; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0b0806"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="The Armory"><link rel="icon" href="icons/icon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><style>*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#f0e2c4;font:16px/1.45 Georgia,'Times New Roman',serif}
+<html lang="en"><head><meta charset="utf-8"><title>The Armory</title><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'sha256-A6lIauihq1dXzU8QU7IgZfEOnT60+tV0xGvepCjyuds='; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0b0806"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="The Armory"><link rel="icon" href="icons/icon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><style>*{box-sizing:border-box}html,body{margin:0;height:100%;background:#000;color:#f0e2c4;font:16px/1.45 Georgia,'Times New Roman',serif}
 body{display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
  background:radial-gradient(ellipse at 50% 18%,#3a2716 0,#1a110a 38%,#050302 75%,#000 100%)}
 main{width:100%;max-width:380px;text-align:center;position:relative}
@@ -52,21 +52,21 @@ button{min-height:48px;min-width:48px;font:16px Georgia,serif;border-radius:6px;
    handed to the service worker, which checks it by decrypting app.bin (GCM tag) -> reload; the worker serves the decrypted app.
    A wrong passphrase gets one generic message after a short fixed delay. */
 (()=>{'use strict';
-const CFG={"v":"112.1","salt":"RtvzrYxooJO7rYcYwQeVMQ==","iter":600000,"failDelayMs":1200};
+const CFG={"v":"112.2","salt":"RtvzrYxooJO7rYcYwQeVMQ==","iter":600000,"failDelayMs":1200,"vdb":"armory-vault","dev":false};
 const D=document,W=window,N=navigator,$=id=>D.getElementById(id);
-const VDB='armory-vault', VST='keys';
+const VDB=CFG.vdb, VST='keys';
 const els={form:$('unlock'),pass:$('pass'),show:$('show'),rem:$('remember'),go:$('go'),msg:$('msg'),status:$('status'),locked:$('locked'),lockedD:$('lockedD'),del:$('del'),ver:$('ver'),sub:$('sub')};
 let ready=false,busy=false,reg=null;
 const info={version:CFG.v,unlockMs:null,deriveMs:null};
 try{Object.defineProperty(W,'ArmoryLoader',{value:info})}catch(_){}
-els.ver.textContent='v'+CFG.v+' \u00b7 test build';
+els.ver.textContent='v'+CFG.v+(CFG.dev?' \u00b7 DEV test build':' \u00b7 test build');if(CFG.dev){els.sub.textContent='DEV test build (dev menu enabled). Enter the passphrase to open it.';D.title='The Armory DEV'}
 const norm=s=>s.normalize('NFC').trim().replace(/\s+/g,' ').toLowerCase();
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function idb(mode,fn){return new Promise((res,rej)=>{const q=indexedDB.open(VDB,1);q.onupgradeneeded=()=>q.result.createObjectStore(VST);q.onerror=()=>rej(q.error);
  q.onsuccess=()=>{const db=q.result,tx=db.transaction(VST,mode);let out;const r=fn(tx.objectStore(VST));if(r)r.onsuccess=()=>{out=r.result};tx.oncomplete=()=>{db.close();res(out)};tx.onerror=tx.onabort=()=>{db.close();rej(tx.error)}}})}
 const delVault=()=>new Promise(r=>{try{const q=indexedDB.deleteDatabase(VDB);q.onsuccess=q.onerror=q.onblocked=()=>r()}catch(_){r()}});
-function ask(msg,ms=15000){const sw=N.serviceWorker&&(N.serviceWorker.controller||(reg&&reg.active));if(!sw)return Promise.resolve(null);
+function ask(msg,ms=15000){const sw=N.serviceWorker&&((reg&&reg.active)||N.serviceWorker.controller);   // OUR worker first: under /dev/ the page can start out controlled by the root app's workerif(!sw)return Promise.resolve(null);
  return new Promise(res=>{const ch=new MessageChannel(),t=setTimeout(()=>res(null),ms);ch.port1.onmessage=e=>{clearTimeout(t);res(e.data&&typeof e.data==='object'?e.data:null)};
   try{sw.postMessage(msg,[ch.port2])}catch(_){clearTimeout(t);res(null)}})}
 function say(t){els.status.textContent=t}
@@ -104,7 +104,7 @@ async function start(){
  if(!('serviceWorker' in N)||!W.isSecureContext||!W.crypto||!crypto.subtle){say('This app needs its https link in a current browser (Safari or Chrome).');return}
  try{if(indexedDB.databases&&(await indexedDB.databases()).some(d=>d.name===VDB))await idb('readwrite',st=>st.delete('k'))}catch(_){}   // only reached if a remembered key no longer opens the app
  try{reg=await N.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'})}catch(_){say('Could not prepare the offline copy. Check the connection and reload.');return}
- for(let i=0;i<600&&!(N.serviceWorker.controller||(reg.active&&reg.active.state==='activated'));i++)await sleep(100);   // first install: wait for the worker
+ for(let i=0;i<600&&!(reg.active&&reg.active.state==='activated');i++)await sleep(100);   // first install: wait for the worker
  for(let i=0;i<120;i++){const r=await ask({type:'armory-sw-ready'},5000);if(r&&r.type==='armory-sw-ready'&&r.ready){ready=true;break}await sleep(500)}
  if(!ready){say('Still downloading the offline copy… keep this open.');return}
  say('Ready. Works offline from now on.');setBusy(false);

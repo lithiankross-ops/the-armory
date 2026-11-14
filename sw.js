@@ -5,11 +5,15 @@
    in memory. Decrypted bytes are never written to Cache Storage or anywhere else. Versioned caches armory-<VERSION>; what is served
    only changes when the player taps "Update available" (armory-meta keeps the served version). Saves (localStorage) are never touched. */
 'use strict';
-const VERSION='112.1';
-const CACHE='armory-'+VERSION, META='armory-meta', CUR='./__armory_serving__';
-const FILES=[["./index.html","p4cfC66yk322TtRGzOnVXErXyTekiU1S/QdgkgDpF4M="],["./app.bin","DKQ0LzAHv5jVcVstwkzxP7nHoFg9IKDtPb5EfouHj9k="],["./manifest.webmanifest","Or8Ud3VicwW6ZJAsB+4yYoPyFsoUZPdu0cSVzTyBtLQ="],["./icons/icon-192.png","tdQgrEuUW/Z0a60Nh2GH4oTzFHWmYUJey24rE8cPMwg="],["./icons/icon-512.png","WoMRdSL/iaKGAr6014WciBJYa712KmsgOHtEQi1iNW0="],["./icons/icon-maskable-512.png","e7qxAQFipcG1f7HY1yWgDo0vcMbVB+CmvR5jKSMd4fE="],["./icons/apple-touch-icon.png","pLMWGSQynwNUpmUe8JPXATntRm4TqoQ6CY/IbMtCTLE="]];   // [path, sha256 base64] of this deploy (integrity-checked on download); app.bin is ciphertext
-const VOK=/^[0-9A-Za-z._-]{1,32}$/, MAGIC='ARMENC01', VDB='armory-vault', VST='keys';
+const VERSION='112.2';
+const P='armory';   // 'armory' (friends) or 'armorydev' (dev-test): separate caches + key store on the shared github.io origin
+const CACHE=P+'-'+VERSION, META=P+'-meta', CUR='./__armory_serving__';
+const FILES=[["./index.html","bWYfPtlmm7id5m4rFlmCMgLWGGHPdssw/VW4kWjAnsI="],["./app.bin","NQaZPnKyp12ILz/sIAwpTA9FUNkWn/Gy1tpubhCBubE="],["./manifest.webmanifest","Or8Ud3VicwW6ZJAsB+4yYoPyFsoUZPdu0cSVzTyBtLQ="],["./icons/icon-192.png","tdQgrEuUW/Z0a60Nh2GH4oTzFHWmYUJey24rE8cPMwg="],["./icons/icon-512.png","WoMRdSL/iaKGAr6014WciBJYa712KmsgOHtEQi1iNW0="],["./icons/icon-maskable-512.png","e7qxAQFipcG1f7HY1yWgDo0vcMbVB+CmvR5jKSMd4fE="],["./icons/apple-touch-icon.png","pLMWGSQynwNUpmUe8JPXATntRm4TqoQ6CY/IbMtCTLE="]];   // [path, sha256 base64] of this deploy (integrity-checked on download); app.bin is ciphertext
+const VOK=/^[0-9A-Za-z._-]{1,32}$/, MAGIC='ARMENC01', VDB=P+'-vault', VST='keys';
 const HDRS={'content-type':'text/html; charset=utf-8','content-security-policy':"frame-ancestors 'none'",'x-content-type-options':'nosniff','referrer-policy':'no-referrer','cache-control':'no-store'};
+const SCOPE=new URL(self.registration.scope).pathname;
+const OWN=new Set(FILES.map(([p])=>new URL(p,self.registration.scope).pathname));   // the only sub-resources this worker answers
+const mine=c=>{try{const p=new URL(c.url).pathname;return p===SCOPE||p===SCOPE+'index.html'}catch(_){return false}};
 let serving=null, memKey=null, memAt=0, plain=null;
 const GRACE_MS=10000;   // an unlock (not remembered) only lasts while an app window stays open (reloads/updates keep it)
 function readServing(){
@@ -26,7 +30,7 @@ function storedKey(){
 function okKey(k){return k&&typeof CryptoKey!=='undefined'&&k instanceof CryptoKey&&k.algorithm&&k.algorithm.name==='AES-GCM'&&k.usages.includes('decrypt')&&!k.extractable}
 function decryptApp(v,key){
   if(plain&&plain.v===v&&plain.key===key)return Promise.resolve(plain.buf);
-  return caches.open('armory-'+v).then(c=>c.match('./app.bin')).then(r=>{if(!r)throw new Error('no app.bin');return r.arrayBuffer()}).then(buf=>{
+  return caches.open(P+'-'+v).then(c=>c.match('./app.bin')).then(r=>{if(!r)throw new Error('no app.bin');return r.arrayBuffer()}).then(buf=>{
     const u=new Uint8Array(buf),m=String.fromCharCode(...u.subarray(0,8));
     if(m!==MAGIC)throw new Error('bad magic');
     const vl=u[8],hl=9+vl+12,ver=String.fromCharCode(...u.subarray(9,9+vl));
@@ -41,11 +45,11 @@ function precache(){
   })));
 }
 self.addEventListener('install',e=>{
-  e.waitUntil(precache().then(readServing).then(v=>v&&v!==VERSION?caches.has('armory-'+v).then(ok=>ok?null:writeServing(VERSION)):writeServing(VERSION))
+  e.waitUntil(precache().then(readServing).then(v=>v&&v!==VERSION?caches.has(P+'-'+v).then(ok=>ok?null:writeServing(VERSION)):writeServing(VERSION))
    .then(()=>self.skipWaiting()));   // taking control is safe: what is SERVED only changes on the player's tap
 });
 self.addEventListener('activate',e=>{
-  e.waitUntil(readServing().then(v=>caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('armory-')&&k!==META&&k!==CACHE&&k!=='armory-'+v).map(k=>caches.delete(k)))))
+  e.waitUntil(readServing().then(v=>caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith(P+'-')&&k!==META&&k!==CACHE&&k!==P+'-'+v).map(k=>caches.delete(k)))))
     .then(()=>self.clients.claim()));
 });
 self.addEventListener('message',e=>{
@@ -56,7 +60,7 @@ self.addEventListener('message',e=>{
   if(d.type==='armory-sw-status'){
     e.waitUntil(readServing().then(v=>port.postMessage({type:'armory-sw-status',serving:v||VERSION,latest:VERSION})));
   }else if(d.type==='armory-sw-ready'){
-    const has=()=>readServing().then(v=>caches.open('armory-'+(v||VERSION))).then(c=>Promise.all([c.match('./app.bin'),c.match('./index.html')])).then(([a,b])=>!!(a&&b));
+    const has=()=>readServing().then(v=>caches.open(P+'-'+(v||VERSION))).then(c=>Promise.all([c.match('./app.bin'),c.match('./index.html')])).then(([a,b])=>!!(a&&b));
     // caches were cleared under a still-running worker (e.g. Delete all app data, then reopened): fetch this version again
     e.waitUntil(has().then(ok=>ok||precache().then(()=>writeServing(VERSION)).then(has,()=>false)).then(ok=>port.postMessage({type:'armory-sw-ready',ready:ok})));
   }else if(d.type==='armory-sw-unlock'){
@@ -70,7 +74,7 @@ self.addEventListener('message',e=>{
     e.waitUntil(caches.open(CACHE).then(c=>Promise.all([c.match('./index.html'),c.match('./app.bin')])).then(([a,b])=>{
       if(!a||!b)return port.postMessage({type:'armory-sw-failed'});
       return writeServing(VERSION)
-        .then(()=>caches.keys()).then(ks=>Promise.all(ks.filter(k=>k.startsWith('armory-')&&k!==META&&k!==CACHE).map(k=>caches.delete(k))))
+        .then(()=>caches.keys()).then(ks=>Promise.all(ks.filter(k=>k.startsWith(P+'-')&&k!==META&&k!==CACHE).map(k=>caches.delete(k))))
         .then(()=>port.postMessage({type:'armory-sw-applied',serving:VERSION}));
     }));
   }
@@ -78,7 +82,7 @@ self.addEventListener('message',e=>{
 function page(body){return new Response(body,{status:200,headers:HDRS})}
 function liveKey(){
   if(!memKey)return Promise.resolve(null);
-  return self.clients.matchAll({type:'window',includeUncontrolled:true}).then(cs=>{
+  return self.clients.matchAll({type:'window',includeUncontrolled:true}).then(cs=>{cs=cs.filter(mine);   // only this app's windows (not a /dev/ window on the same origin)
     if(!cs.length&&Date.now()-memAt>GRACE_MS){memKey=null;plain=null}   // app was closed: next launch asks again
     else memAt=Date.now();
     return memKey;
@@ -87,7 +91,7 @@ function liveKey(){
 function navigate(r){
   return readServing().then(v=>{v=v||VERSION;
     return liveKey().then(k=>k||storedKey()).then(k=>okKey(k)?decryptApp(v,k).then(page,()=>null):null).then(app=>app||
-      caches.open('armory-'+v).then(c=>c.match('./index.html')).then(m=>m||caches.open(CACHE).then(c=>c.match('./index.html')))
+      caches.open(P+'-'+v).then(c=>c.match('./index.html')).then(m=>m||caches.open(CACHE).then(c=>c.match('./index.html')))
         .then(m=>m?m.arrayBuffer().then(page):self.fetch(r)));
   });
 }
@@ -96,8 +100,9 @@ self.addEventListener('fetch',e=>{
   if(r.method!=='GET')return;
   let u;try{u=new URL(r.url)}catch(_){return}
   if(u.origin!==self.location.origin)return;            // other sites: not ours, never touched
-  if(r.mode==='navigate'){e.respondWith(navigate(r));return}
-  e.respondWith(readServing().then(v=>caches.open('armory-'+(v||VERSION))).then(c=>c.match(r,{ignoreSearch:true}))
+  if(r.mode==='navigate'){if(u.pathname===SCOPE||u.pathname===SCOPE+'index.html')e.respondWith(navigate(r));return}   // other pages on this origin (e.g. /dev/): not ours
+  if(!OWN.has(u.pathname))return;                        // not one of this deploy's files (e.g. /dev/*): left to the browser
+  e.respondWith(readServing().then(v=>caches.open(P+'-'+(v||VERSION))).then(c=>c.match(r,{ignoreSearch:true}))
     .then(m=>m||caches.open(CACHE).then(c=>c.match(r,{ignoreSearch:true})))
     .then(m=>m||self.fetch(r)));
 });

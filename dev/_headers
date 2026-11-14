@@ -1,0 +1,13 @@
+# Netlify / Cloudflare Pages response headers (GitHub Pages ignores this file). Extra hardening only; the app's own
+# meta CSP already applies everywhere. frame-ancestors can only be set by a header.
+/*
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), notifications=(), push=()
+  Cross-Origin-Opener-Policy: same-origin
+/sw.js
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
