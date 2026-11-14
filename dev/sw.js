@@ -5,10 +5,10 @@
    in memory. Decrypted bytes are never written to Cache Storage or anywhere else. Versioned caches armory-<VERSION>; what is served
    only changes when the player taps "Update available" (armory-meta keeps the served version). Saves (localStorage) are never touched. */
 'use strict';
-const VERSION='112.2-dev';
+const VERSION='113-dev';
 const P='armorydev';   // 'armory' (friends) or 'armorydev' (dev-test): separate caches + key store on the shared github.io origin
 const CACHE=P+'-'+VERSION, META=P+'-meta', CUR='./__armory_serving__';
-const FILES=[["./index.html","7lG6uDEwS+WDaUg2+mFn72TB0AvMq2SCOQjrOh2yK2o="],["./app.bin","1EaUa+rh9epoy9LSUvwv10YksIDHp9BcNyoYPG7yF/U="],["./manifest.webmanifest","QpRoq7Fxwb1WImHNeck5b/JtzGhwfeZ7ZLARTPlvh9U="],["./icons/icon-192.png","6lypkogkDONNFNkLJL9XD6S+uVu4imMXLkkbZAztdMM="],["./icons/icon-512.png","2GxowLsYQ3iME3IIgwkBGcxIKOSbrjhIt1NCDNFFoyQ="],["./icons/icon-maskable-512.png","t2karDYYi/ovaROOqrcNa7iNgcQ2QnLKJPVH69+L4io="],["./icons/apple-touch-icon.png","jiPCpvAmIwentNLloTej8gvXYWinm5OHBiulS/SHFPE="]];   // [path, sha256 base64] of this deploy (integrity-checked on download); app.bin is ciphertext
+const FILES=[["./index.html","9fNge4ZWG9BLh/+iSYR0BPOnsppKN+e/059TpS8gtlc="],["./app.bin","k/obHgtTBWqXRdhMVsLSRTAObiJTMhRuuR7NQmvBsuw="],["./manifest.webmanifest","QpRoq7Fxwb1WImHNeck5b/JtzGhwfeZ7ZLARTPlvh9U="],["./icons/icon-192.png","6lypkogkDONNFNkLJL9XD6S+uVu4imMXLkkbZAztdMM="],["./icons/icon-512.png","2GxowLsYQ3iME3IIgwkBGcxIKOSbrjhIt1NCDNFFoyQ="],["./icons/icon-maskable-512.png","t2karDYYi/ovaROOqrcNa7iNgcQ2QnLKJPVH69+L4io="],["./icons/apple-touch-icon.png","jiPCpvAmIwentNLloTej8gvXYWinm5OHBiulS/SHFPE="]];   // [path, sha256 base64] of this deploy (integrity-checked on download); app.bin is ciphertext
 const VOK=/^[0-9A-Za-z._-]{1,32}$/, MAGIC='ARMENC01', VDB=P+'-vault', VST='keys';
 const HDRS={'content-type':'text/html; charset=utf-8','content-security-policy':"frame-ancestors 'none'",'x-content-type-options':'nosniff','referrer-policy':'no-referrer','cache-control':'no-store'};
 const SCOPE=new URL(self.registration.scope).pathname;
