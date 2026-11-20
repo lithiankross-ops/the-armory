@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Mockups</title><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4D5e9/ZCzNcHcwGLRbX7LNG2jcEh9bNLiOwF5vK8Ysg=' 'sha256-SSq5w0jf24lJVy+8Opmnx8dIbBKTwXIvjY16KtJITYo='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; connect-src 'self'; frame-src blob:; child-src blob:; worker-src 'none'; font-src data:; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b0806"><meta name="robots" content="noindex,nofollow"><style>*{box-sizing:border-box}html{min-height:100%;background:#000 radial-gradient(ellipse at 50% 12%,#3a2716 0,#1a110a 38%,#050302 75%,#000 100%) no-repeat fixed}
+body{margin:0;color:#f0e2c4;font:16px/1.45 Georgia,'Times New Roman',serif;
+ padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom))}
+main{width:100%;max-width:440px;margin:0 auto;text-align:center}
+.arch{margin:12px auto 14px;width:112px;height:140px;border:3px solid #ad8953;border-bottom:none;border-radius:56px 56px 0 0;
+ background:linear-gradient(#24170e,#0b0806);box-shadow:inset 0 0 30px #000,0 0 40px #e7a94a22;display:flex;align-items:center;justify-content:center}
+.arch span{font-size:54px;color:#e7c98b;text-shadow:0 0 18px #e7a94a55}
+h1{margin:0 0 4px;font-size:28px;font-weight:normal;letter-spacing:.06em;color:#f3d79c}
+.sub{margin:0 0 16px;color:#c9b48c;font-size:15px}
+form,.card{background:#120c07e6;border:1px solid #6d5636;border-radius:10px;padding:16px;text-align:left;box-shadow:0 6px 30px #000}
+label.l{display:block;margin:0 0 6px;color:#f3d79c}
+.row{display:flex;gap:8px}
+input[type=password],input[type=text]{flex:1;min-width:0;min-height:48px;padding:10px 12px;font:17px Georgia,serif;color:#fff5df;background:#050302;border:1px solid #ad8953;border-radius:6px}
+input:focus-visible,button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+button{min-height:48px;min-width:48px;font:16px Georgia,serif;border-radius:6px;cursor:pointer;touch-action:manipulation;color:#f0e2c4;background:#2b1e13;border:1px solid #ad8953;padding:0 14px}
+.rem{display:flex;align-items:center;gap:10px;min-height:48px;margin:10px 0 4px;color:#e9dbbd;cursor:pointer}
+.rem input{width:24px;height:24px;margin:0;accent-color:#e7c98b}
+.hint{margin:0 0 12px;font-size:13px;color:#c3ad86}
+.go{width:100%;color:#1a1008;background:#e7c98b;border:2px solid #fff1cf;font-size:18px}
+button:disabled{opacity:.6;cursor:progress}
+.msg{min-height:1.45em;margin:12px 0 0;color:#ffb4a8}.msg:empty{display:none}
+.status{margin:10px 0 0;color:#d9c39a}.status:empty{display:none}
+#list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.card{display:block;width:100%;min-height:96px;padding:14px 16px;font:inherit;color:inherit;text-align:left;border-color:#8a6a3e;
+ background:linear-gradient(#1d140b,#0e0905);transition:border-color .15s,transform .15s}
+.card:hover,.card:focus-visible{border-color:#e7c98b}.card:active{transform:scale(.985)}
+.card .t{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.card b{font-size:20px;font-weight:normal;color:#f3d79c}
+.badge{flex:none;padding:2px 10px;border:1px solid #ad8953;border-radius:999px;font-size:14px;color:#1a1008;background:#e7c98b}
+.card .d{display:block;margin:6px 0 8px;color:#e2d1ad;font-size:15px}
+.card .m{display:block;color:#b9a27a;font-size:13px}
+.card .open{display:block;margin-top:10px;color:#e7c98b;font-size:15px}
+.foot{margin:18px 0 0;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;color:#b9a27a;font-size:12px}
+.foot span{flex:1 0 100%}
+.foot button{font-size:14px;background:#0b0806;border-color:#6d5636;color:#d9c39a}
+#viewer{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;background:#000}
+#bar{flex:none;display:flex;align-items:center;gap:8px;padding:4px max(6px,env(safe-area-inset-right)) 4px max(6px,env(safe-area-inset-left));
+ padding-top:max(4px,env(safe-area-inset-top));background:#120c07;border-bottom:1px solid #6d5636}
+#bar .ttl{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#f3d79c;font-size:15px;text-align:center}
+#back{color:#1a1008;background:#e7c98b;border-color:#fff1cf}
+#stage{position:relative;flex:1;min-height:0}
+#stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#000}
+#vstat{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;text-align:center;color:#d9c39a}
+#vstat progress{width:min(280px,80%);height:10px;accent-color:#e7c98b}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:active{transform:none}}
+</style></head>
+<body><!-- Mockup hub. Every mockup (and the list itself) is stored encrypted (AES-256-GCM); nothing here can open them without the passphrase. -->
+<main id="lock">
+<div class="arch" aria-hidden="true"><span>M</span></div>
+<h1>Mockups</h1>
+<p class="sub">Private mockup hub. Enter the passphrase to open it.</p>
+<form id="unlock" autocomplete="on" novalidate>
+ <label class="l" for="pass">Passphrase</label>
+ <div class="row"><input id="pass" name="password" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" aria-describedby="msg status" required><button type="button" id="show" aria-pressed="false" aria-label="Show passphrase">Show</button></div>
+ <label class="rem"><input type="checkbox" id="remember"> Remember on this device</label>
+ <p class="hint">Only tick this on your own phone. It keeps an unlock key on this device (never the passphrase itself).</p>
+ <button type="submit" class="go" id="go">Unlock</button>
+ <p class="msg" id="msg" role="alert"></p>
+ <p class="status" id="status" role="status" aria-live="polite"></p>
+</form>
+</main>
+<main id="hub" hidden>
+<div class="arch" aria-hidden="true"><span>M</span></div>
+<h1>Mockups</h1>
+<p class="sub">Latest version of each mockup. Tap one to open it.</p>
+<ul id="list" aria-label="Mockups"></ul>
+<div class="foot"><span id="built"></span><button type="button" id="refresh">Check for updates</button><button type="button" id="lockbtn">Lock</button></div>
+</main>
+<div id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vttl">
+ <div id="bar"><button type="button" id="back">&#8592; Hub</button><span class="ttl" id="vttl"></span><button type="button" id="fs" aria-pressed="false">Fullscreen</button></div>
+ <div id="stage"><div id="vstat" role="status" aria-live="polite"><span id="vmsg"></span><progress id="vprog" max="1" value="0"></progress><button type="button" id="vretry" hidden>Reload hub</button></div></div>
+</div>
+<script id="mockup-hub">/* Mockup hub (box tool: /workspace/mockup_hub/hub.py). Same scheme as the Armory /dev/ build: PBKDF2-SHA256 (same salt + cost)
+   -> non-extractable AES-256-GCM key. The mockup list is itself encrypted (it doubles as the passphrase check); each mockup is its
+   own encrypted file under m/, downloaded (same origin only) and decrypted only when it is tapped, then shown from a blob: URL in a
+   sandboxed iframe (scripts only, opaque origin). A wrong passphrase gets one generic message after a short fixed delay. */
+(()=>{'use strict';
+const CFG={"salt":"RtvzrYxooJO7rYcYwQeVMQ==","iter":600000,"failDelayMs":1200,"vdb":"mockuphub-vault","cat":"QVJNRU5DMDEHY2F0YWxvZ4LvWG4d8bnW+uUe7iszWnCEE3IxvY2rGCWIRiS/4TUB7KRFCJ5/2gFu4uVbXn0x8u2kJ/RAVL3JOOSQMqYrqYoojq7Ap64ZXVDyEfjLB4EY1FXxowXfPiAW7yfOiM6QnWtfviEN4xuj/Vp5EfHR2NzcsY3k4RGSbP2LbALAm5KpDgYHpWTzPQYzN1Wr264UmPpyz6pBtqnOC74fd5MSRAplus7kMLui+xsqEfdxkeoflHC9rY+DYAynJmRqTfAu4OF/lHHOr9ez4nyltZbGhzggLDJGvGgfPcIKAJ5tOocrGQ/55LFYY0hX3jFS+z6ZvowBc7SSot8BXnONsWkFb8wk57tr6nh5dA3Ekgk+0g7hpXoxu62zFW12dedVV8WKCS+U1R+ZS6wkmh65WejyYfKY+Jfucdt6PcMp2cQRgZH9XDa7wxMN6UQNIc93RJTc898MUu84SN7Kv0yWB+Vauya/qTgip/g="};
+const D=document,W=window,$=id=>D.getElementById(id);
+const VDB=CFG.vdb,VST='keys',MAGIC='ARMENC01';
+const E={lock:$('lock'),hub:$('hub'),form:$('unlock'),pass:$('pass'),show:$('show'),rem:$('remember'),go:$('go'),msg:$('msg'),status:$('status'),
+ list:$('list'),built:$('built'),refresh:$('refresh'),lockbtn:$('lockbtn'),viewer:$('viewer'),back:$('back'),fs:$('fs'),vttl:$('vttl'),
+ stage:$('stage'),vstat:$('vstat'),vmsg:$('vmsg'),vprog:$('vprog'),vretry:$('vretry')};
+let key=null,cat=[],busy=false,openId=null,frame=null,url=null,pushed=false,job=0;
+const norm=s=>s.normalize('NFC').trim().replace(/\s+/g,' ').toLowerCase();   // same as the Armory loader
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const MB=n=>(n/1048576).toFixed(1)+' MB';
+function idb(mode,fn){return new Promise((res,rej)=>{const q=indexedDB.open(VDB,1);q.onupgradeneeded=()=>q.result.createObjectStore(VST);q.onerror=()=>rej(q.error);
+ q.onsuccess=()=>{const db=q.result,tx=db.transaction(VST,mode);let out;const r=fn(tx.objectStore(VST));if(r)r.onsuccess=()=>{out=r.result};
+  tx.oncomplete=()=>{db.close();res(out)};tx.onerror=tx.onabort=()=>{db.close();rej(tx.error)}}})}
+async function open(k,buf,expect){   // header = MAGIC | len | label | 12-byte IV, authenticated as AAD
+ const u=new Uint8Array(buf);if(u.length<30)throw 0;
+ for(let i=0;i<8;i++)if(u[i]!==MAGIC.charCodeAt(i))throw 0;
+ const n=u[8],hl=9+n+12,label=String.fromCharCode(...u.subarray(9,9+n));
+ if(expect&&label!==expect)throw 0;
+ return crypto.subtle.decrypt({name:'AES-GCM',iv:u.subarray(9+n,hl),additionalData:u.subarray(0,hl),tagLength:128},k,u.subarray(hl));
+}
+function valid(c){   // the list is decrypted data: check its shape before use
+ if(!c||typeof c!=='object'||!Array.isArray(c.items))return null;
+ const ok=c.items.filter(m=>m&&typeof m==='object'&&typeof m.id==='string'&&/^[a-z0-9_-]{1,40}$/.test(m.id)&&typeof m.file==='string'&&/^m\/[a-z0-9_-]+\.[0-9a-f]{16}\.bin$/.test(m.file)
+  &&['title','desc','version','date'].every(f=>typeof m[f]==='string'&&m[f].length<400)&&Number.isFinite(m.bytes)&&typeof m.label==='string'&&m.label.length<200);
+ return {items:ok,built:typeof c.built==='string'?c.built.slice(0,40):''};
+}
+async function tryKey(k){try{const c=valid(JSON.parse(new TextDecoder().decode(await open(k,b64(CFG.cat),'catalog'))));if(!c)return false;cat=c.items;E.built.textContent=c.built?'Updated '+c.built:'';return true}catch(_){return false}}
+function el(tag,cls,txt,parent){const e=D.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;if(parent)parent.appendChild(e);return e}
+function render(){E.list.replaceChildren();
+ if(!cat.length){el('li','sub','No mockups yet.',E.list);return}
+ for(const m of cat){const li=el('li',null,null,E.list),b=el('button','card',null,li);b.type='button';
+  const t=el('span','t',null,b);el('b',null,m.title,t);el('span','badge',m.version,t);
+  el('span','d',m.desc,b);el('span','m',m.date+' \u00b7 '+MB(m.bytes),b);el('span','open','Open \u2192',b);
+  b.setAttribute('aria-label','Open '+m.title+', version '+m.version);b.addEventListener('click',()=>openMock(m))}}
+function showHub(){E.lock.hidden=true;E.hub.hidden=false;render();D.title='Mockups'}
+E.show.addEventListener('click',()=>{const on=E.pass.type==='password';E.pass.type=on?'text':'password';E.show.textContent=on?'Hide':'Show';E.show.setAttribute('aria-pressed',String(on));E.show.setAttribute('aria-label',on?'Hide passphrase':'Show passphrase')});
+E.form.addEventListener('submit',async e=>{e.preventDefault();if(busy)return;
+ const pw=norm(E.pass.value||'');if(!pw){E.msg.textContent='Enter the passphrase.';E.pass.focus();return}
+ busy=true;E.go.disabled=E.pass.disabled=E.show.disabled=true;E.msg.textContent='';E.status.textContent='Unlocking\u2026';let ok=false,k=null;
+ try{const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  k=await crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt:b64(CFG.salt),iterations:CFG.iter},base,{name:'AES-GCM',length:256},false,['decrypt']);
+  ok=await tryKey(k)}catch(_){ok=false}
+ E.pass.value='';
+ if(ok){key=k;if(E.rem.checked){try{await idb('readwrite',st=>st.put(k,'k'))}catch(_){}}E.status.textContent='';busy=false;E.go.disabled=E.pass.disabled=E.show.disabled=false;showHub();return}
+ await sleep(CFG.failDelayMs);   // short fixed delay before the one generic answer
+ E.msg.textContent='That passphrase did not unlock the hub.';E.status.textContent='';busy=false;E.go.disabled=E.pass.disabled=E.show.disabled=false;E.pass.focus()});
+E.lockbtn.addEventListener('click',async()=>{key=null;try{await idb('readwrite',st=>st.delete('k'))}catch(_){}location.reload()});
+async function hardReload(){try{await Promise.all(['./','./index.html'].map(p=>fetch(p,{cache:'reload',credentials:'omit'})))}catch(_){}location.reload()}
+E.refresh.addEventListener('click',hardReload);E.vretry.addEventListener('click',hardReload);
+async function getBytes(m,my){   // same-origin GET with progress; the file name carries its content hash, so a cached copy is never stale
+ const r=await fetch(m.file,{credentials:'omit',redirect:'error'});
+ if(!r.ok)throw new Error(r.status===404?'gone':'net');
+ const total=m.bytes||+r.headers.get('content-length')||0;
+ if(!r.body||!r.body.getReader)return r.arrayBuffer();
+ const rd=r.body.getReader(),parts=[];let got=0;
+ for(;;){const {done,value}=await rd.read();if(done)break;if(my!==job){try{rd.cancel()}catch(_){}throw new Error('cancel')}
+  parts.push(value);got+=value.length;if(total){E.vprog.value=Math.min(1,got/total);E.vmsg.textContent='Downloading '+m.title+'\u2026 '+MB(got)+' / '+MB(total)}}
+ const out=new Uint8Array(got);let o=0;for(const p of parts){out.set(p,o);o+=p.length}return out.buffer}
+async function openMock(m){if(!key||openId)return;
+ const my=++job;openId=m.id;E.vttl.textContent=m.title+' \u00b7 '+m.version;E.viewer.hidden=false;E.vstat.hidden=false;E.vretry.hidden=true;E.vprog.hidden=false;E.vprog.value=0;
+ E.vmsg.textContent='Downloading '+m.title+'\u2026';D.title=m.title+' \u00b7 Mockups';
+ if(!pushed){try{history.pushState({mockup:m.id},'');pushed=true}catch(_){}}
+ E.back.focus();
+ try{const enc=await getBytes(m,my);if(my!==job)return;
+  E.vmsg.textContent='Decrypting\u2026';E.vprog.removeAttribute('value');
+  let pt=await open(key,enc,m.label);
+  if(m.z){pt=await new Response(new Blob([pt]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()}
+  if(my!==job)return;
+  url=URL.createObjectURL(new Blob([pt],{type:'text/html;charset=utf-8'}));pt=null;
+  frame=D.createElement('iframe');frame.setAttribute('sandbox','allow-scripts allow-pointer-lock');frame.setAttribute('allow','fullscreen');
+  frame.setAttribute('referrerpolicy','no-referrer');frame.title=m.title;
+  frame.addEventListener('load',()=>{if(my===job){E.vstat.hidden=true;try{frame.focus()}catch(_){}}},{once:true});
+  frame.src=url;E.stage.appendChild(frame);
+ }catch(err){if(my!==job)return;E.vprog.hidden=true;
+  const gone=err&&err.message==='gone';E.vmsg.textContent=gone?'This mockup was just updated. Reload the hub to get the new version.':(err&&err.message==='net'?'Could not download it. Check the connection and try again.':'Could not open this mockup.');
+  E.vretry.hidden=!gone}}
+function closeViewer(){job++;if(D.fullscreenElement){try{D.exitFullscreen()}catch(_){}}
+ if(frame){frame.remove();frame=null}if(url){URL.revokeObjectURL(url);url=null}
+ openId=null;E.viewer.hidden=true;D.title='Mockups';const b=E.list.querySelector('.card');if(b)b.focus()}
+E.back.addEventListener('click',()=>{if(pushed){history.back()}else closeViewer()});
+W.addEventListener('popstate',()=>{pushed=false;if(openId!==null||!E.viewer.hidden)closeViewer()});
+if(!(D.fullscreenEnabled&&E.viewer.requestFullscreen))E.fs.hidden=true;
+E.fs.addEventListener('click',async()=>{try{if(D.fullscreenElement)await D.exitFullscreen();else await E.viewer.requestFullscreen({navigationUI:'hide'})}catch(_){}});
+D.addEventListener('fullscreenchange',()=>{const on=!!D.fullscreenElement;E.fs.textContent=on?'Exit fullscreen':'Fullscreen';E.fs.setAttribute('aria-pressed',String(on))});
+async function start(){
+ if(!W.isSecureContext&&location.protocol!=='file:'||!W.crypto||!crypto.subtle){E.status.textContent='This page needs its https link in a current browser.';E.go.disabled=true;return}
+ try{if(indexedDB.databases&&!(await indexedDB.databases()).some(d=>d.name===VDB))throw 0;const k=await idb('readonly',st=>st.get('k'));
+  if(k&&await tryKey(k)){key=k;showHub();return}if(k)await idb('readwrite',st=>st.delete('k'))}catch(_){}
+ E.pass.focus({preventScroll:true});
+}
+start();
+})();
+</script>
+</body></html>
