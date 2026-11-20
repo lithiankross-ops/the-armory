@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>Mockups</title><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4D5e9/ZCzNcHcwGLRbX7LNG2jcEh9bNLiOwF5vK8Ysg=' 'sha256-SSq5w0jf24lJVy+8Opmnx8dIbBKTwXIvjY16KtJITYo='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; connect-src 'self'; frame-src blob:; child-src blob:; worker-src 'none'; font-src data:; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'none'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b0806"><meta name="robots" content="noindex,nofollow"><style>*{box-sizing:border-box}html{min-height:100%;background:#000 radial-gradient(ellipse at 50% 12%,#3a2716 0,#1a110a 38%,#050302 75%,#000 100%) no-repeat fixed}
+<html lang="en"><head><meta charset="utf-8"><title>Mockups</title><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-PxjxJJJgoKsr2F3uVa0MmpRCW058cx/WpDXgdxolZe8=' 'sha256-SSq5w0jf24lJVy+8Opmnx8dIbBKTwXIvjY16KtJITYo='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; connect-src 'self'; frame-src blob:; child-src blob:; worker-src 'self'; font-src data:; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'"><meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0b0806"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="Mockups"><link rel="icon" href="icons/icon-192.png" sizes="192x192"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="robots" content="noindex,nofollow"><style>*{box-sizing:border-box}html{min-height:100%;background:#000 radial-gradient(ellipse at 50% 12%,#3a2716 0,#1a110a 38%,#050302 75%,#000 100%) no-repeat fixed}
 body{margin:0;color:#f0e2c4;font:16px/1.45 Georgia,'Times New Roman',serif;
  padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom))}
 main{width:100%;max-width:440px;margin:0 auto;text-align:center}
@@ -45,6 +45,11 @@ button:disabled{opacity:.6;cursor:progress}
 #vstat progress{width:min(280px,80%);height:10px;accent-color:#e7c98b}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.card{transition:none}.card:active{transform:none}}
+/* "Update available" button: same look and place as the Armory app's */
+.app-upd{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:2147483000;min-height:44px;min-width:44px;max-width:calc(100vw - 24px);padding:10px 18px;font:15px/1.25 Georgia,serif;color:#1a1008;background:#e7c98b;border:2px solid #fff1cf;border-radius:22px;box-shadow:0 3px 14px #000c;cursor:pointer;touch-action:manipulation}
+.app-upd:focus-visible{outline:3px solid #fff;outline-offset:2px}.app-upd:disabled{opacity:.85;cursor:progress}
+.app-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#upmsg:empty{display:none}
 </style></head>
 <body><!-- Mockup hub. Every mockup (and the list itself) is stored encrypted (AES-256-GCM); nothing here can open them without the passphrase. -->
 <main id="lock">
@@ -60,29 +65,31 @@ button:disabled{opacity:.6;cursor:progress}
  <p class="msg" id="msg" role="alert"></p>
  <p class="status" id="status" role="status" aria-live="polite"></p>
 </form>
+<div class="foot"><span id="ver"></span></div>
 </main>
 <main id="hub" hidden>
 <div class="arch" aria-hidden="true"><span>M</span></div>
 <h1>Mockups</h1>
 <p class="sub">Latest version of each mockup. Tap one to open it.</p>
 <ul id="list" aria-label="Mockups"></ul>
-<div class="foot"><span id="built"></span><button type="button" id="refresh">Check for updates</button><button type="button" id="lockbtn">Lock</button></div>
+<div class="foot"><span id="ver2"></span><span id="built"></span><span id="upmsg" role="status" aria-live="polite"></span><button type="button" id="refresh">Check for updates</button><button type="button" id="lockbtn">Lock</button></div>
 </main>
 <div id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vttl">
  <div id="bar"><button type="button" id="back">&#8592; Hub</button><span class="ttl" id="vttl"></span><button type="button" id="fs" aria-pressed="false">Fullscreen</button></div>
- <div id="stage"><div id="vstat" role="status" aria-live="polite"><span id="vmsg"></span><progress id="vprog" max="1" value="0"></progress><button type="button" id="vretry" hidden>Reload hub</button></div></div>
+ <div id="stage"><div id="vstat" role="status" aria-live="polite"><span id="vmsg"></span><progress id="vprog" max="1" value="0"></progress><button type="button" id="vretry" hidden>Update hub</button></div></div>
 </div>
+<button type="button" id="upd" class="app-upd" hidden></button><div id="updlive" class="app-sr" role="status" aria-live="polite"></div>
 <script id="mockup-hub">/* Mockup hub (box tool: /workspace/mockup_hub/hub.py). Same scheme as the Armory /dev/ build: PBKDF2-SHA256 (same salt + cost)
    -> non-extractable AES-256-GCM key. The mockup list is itself encrypted (it doubles as the passphrase check); each mockup is its
    own encrypted file under m/, downloaded (same origin only) and decrypted only when it is tapped, then shown from a blob: URL in a
    sandboxed iframe (scripts only, opaque origin). A wrong passphrase gets one generic message after a short fixed delay. */
 (()=>{'use strict';
-const CFG={"salt":"RtvzrYxooJO7rYcYwQeVMQ==","iter":600000,"failDelayMs":1200,"vdb":"mockuphub-vault","cat":"QVJNRU5DMDEHY2F0YWxvZ4LvWG4d8bnW+uUe7iszWnCEE3IxvY2rGCWIRiS/4TUB7KRFCJ5/2gFu4uVbXn0x8u2kJ/RAVL3JOOSQMqYrqYoojq7Ap64ZXVDyEfjLB4EY1FXxowXfPiAW7yfOiM6QnWtfviEN4xuj/Vp5EfHR2NzcsY3k4RGSbP2LbALAm5KpDgYHpWTzPQYzN1Wr264UmPpyz6pBtqnOC74fd5MSRAplus7kMLui+xsqEfdxkeoflHC9rY+DYAynJmRqTfAu4OF/lHHOr9ez4nyltZbGhzggLDJGvGgfPcIKAJ5tOocrGQ/55LFYY0hX3jFS+z6ZvowBc7SSot8BXnONsWkFb8wk57tr6nh5dA3Ekgk+0g7hpXoxu62zFW12dedVV8WKCS+U1R+ZS6wkmh65WejyYfKY+Jfucdt6PcMp2cQRgZH9XDa7wxMN6UQNIc93RJTc898MUu84SN7Kv0yWB+Vauya/qTgip/g="};
+const CFG={"v":"1","salt":"RtvzrYxooJO7rYcYwQeVMQ==","iter":600000,"failDelayMs":1200,"vdb":"mockuphub-vault","cat":"QVJNRU5DMDEHY2F0YWxvZ4fdoSCYpaxAqcxcjxiVbgfS4nI8bZtfny/m9nmEgeSDTB0GiEHbmhygXrlSHD9oiHmfjkFkfB/IDqk1mPvWQIPz7aFr+985Cp7SMHjzMQBbPP2foEE4TMZNFwi5KTLbo7H2Zl1ejqBGvJMA60oKAeBL9JjR1ZyJ6vuFb8uNgBwbv5qIEr5pl0hpFlXY+Pd/XjHtIdOl9TsVqVjOUaElx0pcs2DcRlGjHKfo2uPaEf1zLhbiLiP+gu8VlNvfbOj1TX4wo8sMYolx4F7PpLn+mnQDNIqvjXy9bZx/P9VgGaykZpk41PcCOsqte0xv85etYoW/MXvAliNq2yZw8QmJQ4AHWsVG+kCokH5liyrA5kSlts5b1ahE6pqXVhZ3PJLxxoplP9UPyOZS2GpaeOSZJI+a4DohwYo2f0yJmynPacWR+6F60yzNNf+C1m0AuCCgGelT948SzdVowyq8wtkGnm7BUQ9b4ZM="};
 const D=document,W=window,$=id=>D.getElementById(id);
 const VDB=CFG.vdb,VST='keys',MAGIC='ARMENC01';
 const E={lock:$('lock'),hub:$('hub'),form:$('unlock'),pass:$('pass'),show:$('show'),rem:$('remember'),go:$('go'),msg:$('msg'),status:$('status'),
  list:$('list'),built:$('built'),refresh:$('refresh'),lockbtn:$('lockbtn'),viewer:$('viewer'),back:$('back'),fs:$('fs'),vttl:$('vttl'),
- stage:$('stage'),vstat:$('vstat'),vmsg:$('vmsg'),vprog:$('vprog'),vretry:$('vretry')};
+ stage:$('stage'),vstat:$('vstat'),vmsg:$('vmsg'),vprog:$('vprog'),vretry:$('vretry'),upd:$('upd'),updlive:$('updlive'),ver:$('ver'),ver2:$('ver2'),upmsg:$('upmsg')};
 let key=null,cat=[],busy=false,openId=null,frame=null,url=null,pushed=false,job=0;
 const norm=s=>s.normalize('NFC').trim().replace(/\s+/g,' ').toLowerCase();   // same as the Armory loader
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -125,8 +132,9 @@ E.form.addEventListener('submit',async e=>{e.preventDefault();if(busy)return;
  await sleep(CFG.failDelayMs);   // short fixed delay before the one generic answer
  E.msg.textContent='That passphrase did not unlock the hub.';E.status.textContent='';busy=false;E.go.disabled=E.pass.disabled=E.show.disabled=false;E.pass.focus()});
 E.lockbtn.addEventListener('click',async()=>{key=null;try{await idb('readwrite',st=>st.delete('k'))}catch(_){}location.reload()});
-async function hardReload(){try{await Promise.all(['./','./index.html'].map(p=>fetch(p,{cache:'reload',credentials:'omit'})))}catch(_){}location.reload()}
-E.refresh.addEventListener('click',hardReload);E.vretry.addEventListener('click',hardReload);
+E.refresh.addEventListener('click',async()=>{E.refresh.disabled=true;E.upmsg.textContent='Checking for updates\u2026';const d=await checkNow();E.refresh.disabled=false;
+ E.upmsg.textContent=offered?'Update available: v'+offered+'. Tap the button at the top.':(d?'You have the latest version (v'+CFG.v+').':'Could not check for updates. Check the connection and try again.')});
+E.vretry.addEventListener('click',async()=>{if(!offered)await checkNow();if(offered)apply();else location.reload()});
 async function getBytes(m,my){   // same-origin GET with progress; the file name carries its content hash, so a cached copy is never stale
  const r=await fetch(m.file,{credentials:'omit',redirect:'error'});
  if(!r.ok)throw new Error(r.status===404?'gone':'net');
@@ -152,7 +160,7 @@ async function openMock(m){if(!key||openId)return;
   frame.addEventListener('load',()=>{if(my===job){E.vstat.hidden=true;try{frame.focus()}catch(_){}}},{once:true});
   frame.src=url;E.stage.appendChild(frame);
  }catch(err){if(my!==job)return;E.vprog.hidden=true;
-  const gone=err&&err.message==='gone';E.vmsg.textContent=gone?'This mockup was just updated. Reload the hub to get the new version.':(err&&err.message==='net'?'Could not download it. Check the connection and try again.':'Could not open this mockup.');
+  const gone=err&&err.message==='gone';E.vmsg.textContent=gone?'This mockup was just updated. Tap Update hub to get the new version.':(err&&err.message==='net'?'Could not download it. Check the connection and try again.':'Could not open this mockup.');
   E.vretry.hidden=!gone}}
 function closeViewer(){job++;if(D.fullscreenElement){try{D.exitFullscreen()}catch(_){}}
  if(frame){frame.remove();frame=null}if(url){URL.revokeObjectURL(url);url=null}
@@ -168,6 +176,33 @@ async function start(){
   if(k&&await tryKey(k)){key=k;showHub();return}if(k)await idb('readwrite',st=>st.delete('k'))}catch(_){}
  E.pass.focus({preventScroll:true});
 }
+/* Updates: the same system as the Armory app. The hub's own service worker (./sw.js, this folder only) keeps serving the copy
+   that is running (offline too) and downloads a new version in the background; nothing switches until the user taps
+   "Update available". Checks on open, on returning to the app, every 30 minutes and on "Check for updates". */
+const N=navigator,CHECK_MS=30*60*1000;let reg=null,offered=null,upBusy=false;
+E.ver.textContent=E.ver2.textContent='v'+CFG.v+' \u00b7 mockup hub';
+function ask(msg,ms=4000){const sw=N.serviceWorker&&((reg&&reg.active)||N.serviceWorker.controller);   // OUR worker first: the page can start out controlled by the Armory root's worker
+ if(!sw)return Promise.resolve(null);
+ return new Promise(res=>{const ch=new MessageChannel(),t=setTimeout(()=>res(null),ms);ch.port1.onmessage=e=>{clearTimeout(t);const d=e.data;res(d&&typeof d==='object'?d:null)};
+  try{sw.postMessage(msg,[ch.port2])}catch(_){clearTimeout(t);res(null)}})}
+const vok=v=>typeof v==='string'&&/^[0-9A-Za-z._-]{1,32}$/.test(v);
+async function status(){const d=await ask({type:'mockuphub-sw-status'});if(!d||d.type!=='mockuphub-sw-status'||!vok(d.serving)||!vok(d.latest))return null;
+ if(d.serving===CFG.v&&d.latest!==CFG.v)offer(d.latest);return d}   // only offer a newer download over the copy that is running
+function offer(v){if(upBusy||offered===v)return;offered=v;E.upd.textContent='Update available \u2014 tap to update to v'+v;
+ E.upd.setAttribute('aria-label','Update available: tap to update the Mockup hub to version '+v+'.');E.upd.hidden=false;E.updlive.textContent='Update available: version '+v}
+async function apply(){if(upBusy||!offered)return;upBusy=true;E.upd.hidden=false;E.upd.disabled=true;E.upd.textContent='Updating\u2026';E.updlive.textContent='Updating';
+ const d=await ask({type:'mockuphub-sw-apply',version:offered});
+ if(d&&d.type==='mockuphub-sw-applied'&&d.serving===offered){location.reload();return}
+ upBusy=false;E.upd.disabled=false;E.upd.textContent='Update failed \u2014 tap to try again';E.updlive.textContent='Update failed'}
+E.upd.addEventListener('click',e=>{e.preventDefault();apply()});
+function waitIdle(){const n=reg&&(reg.installing||reg.waiting);if(!n)return Promise.resolve();return new Promise(r=>{const t=setTimeout(r,20000);const f=()=>{if(n.state==='activated'||n.state==='redundant'){clearTimeout(t);r()}};n.addEventListener('statechange',f);f()})}
+function checkNow(){if(!reg)return Promise.resolve(null);return reg.update().then(()=>new Promise(r=>setTimeout(r,50))).then(waitIdle).then(status,()=>null)}
+try{Object.defineProperty(W,'MockupHub',{value:Object.freeze({version:CFG.v,get available(){return offered},checkNow,status,apply})})}catch(_){}
+try{if(location.protocol!=='file:'&&W.isSecureContext&&navigator.serviceWorker)navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(r=>{reg=r;
+ N.serviceWorker.addEventListener('controllerchange',()=>{status()});   // a new worker took over: ask, never reload by itself
+ r.addEventListener('updatefound',()=>{waitIdle().then(status)});
+ status();checkNow();setInterval(checkNow,CHECK_MS);D.addEventListener('visibilitychange',()=>{if(!D.hidden)checkNow()});
+}).catch(()=>{})}catch(_){}
 start();
 })();
 </script>
