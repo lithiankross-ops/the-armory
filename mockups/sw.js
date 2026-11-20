@@ -6,9 +6,9 @@
    Mockup files m/<id>.<hash>.bin are ciphertext only (never decrypted here); the name carries the content hash, so a cached copy is
    never stale. Each one is kept after its first open so it also opens offline; files the served version no longer lists are dropped. */
 'use strict';
-const VERSION='1';
-const FILES=[["./index.html","l0sqNeIgh5/zHUA8MC75s9bRefa4wM8xTpfp/teKLVk="],["./manifest.webmanifest","1U/100UL1WJdY1cSHUmxFrcVvrMyMxjyFD+niPL/bJI="],["./icons/icon-192.png","WYme61CRQ+ksKB9G2aXCTNHD+StsCR4/Z29l0nrp66U="],["./icons/icon-512.png","xvTfL/zsBsaYeT+Gv+t3f/noMZ9Y/8Sp232B7cM2x0M="],["./icons/icon-maskable-512.png","5ILejvRIYYb1Zuo6hl6y0Tgdyq2aSx63Bw83kya91oM="],["./icons/apple-touch-icon.png","EUzEjKjJlX5jlHOAJvWsxvQQpCodl6a8JcLqmOafm9c="]];   // [path, sha256 base64] of this build's hub shell
-const BINLIST=["./m/battle_map.eecb9100cbee205c.bin"];  // mockup files this build's hub page lists (public file names, ciphertext)
+const VERSION='3';
+const FILES=[["./index.html","D1XRk1SiT0KtO27cczHRx4bgd10NN0wY2iPUWajhX1Y="],["./manifest.webmanifest","1U/100UL1WJdY1cSHUmxFrcVvrMyMxjyFD+niPL/bJI="],["./icons/icon-192.png","WYme61CRQ+ksKB9G2aXCTNHD+StsCR4/Z29l0nrp66U="],["./icons/icon-512.png","xvTfL/zsBsaYeT+Gv+t3f/noMZ9Y/8Sp232B7cM2x0M="],["./icons/icon-maskable-512.png","5ILejvRIYYb1Zuo6hl6y0Tgdyq2aSx63Bw83kya91oM="],["./icons/apple-touch-icon.png","EUzEjKjJlX5jlHOAJvWsxvQQpCodl6a8JcLqmOafm9c="]];   // [path, sha256 base64] of this build's hub shell
+const BINLIST=["./m/battle_map.040f6c4525b9397b.bin"];  // mockup files this build's hub page lists (public file names, ciphertext)
 const P='mockuphub', CACHE=P+'-'+VERSION, META=P+'-meta', BINS=P+'-bins', CUR='./__mockuphub_serving__';
 const VOK=/^[0-9A-Za-z._-]{1,32}$/;
 const SCOPE=new URL(self.registration.scope).pathname;            // /the-armory/mockups/
